@@ -1,15 +1,108 @@
 ---
 layout: default
-title: Student Blog
+title: Login
 ---
 
+## User Login
+// Define variables
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
 
-## Build you Home Page here 
-This is about your journey. Start now!!!
+// General styles
+body {
+  font-family: Arial, sans-serif;
+  background-color: #ecf0f1;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
 
-## Overview of Hacks, Study and Tangibles
-Blogging in GitHub pages is a way to learn and code at the same time. 
+h1 {
+  color: $primary-color;
+}
 
-- Plans, Lists, [Scrum Boards](https://clickup.com/blog/scrum-board/) help you to track key events, show progress and record time.  Effort is a big part of your class grade.  Show plans and time spent!
-- [Hacks(Todo)](https://levelup.gitconnected.com/six-ultimate-daily-hacks-for-every-programmer-60f5f10feae) enable you to stay in focus with key requirements of the class.  Each Hack will produce Tangibles.
-- Tangibles or [Tangible Artifacts](https://en.wikipedia.org/wiki/Artifact_(software_development)) are things you accumulate as a learner and coder. 
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+// Form styles
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="submit"] {
+  background-color: $primary-color;
+  color: #fff;
+  cursor: pointer;
+}
+
+// Additional styles for validation
+input:valid {
+  border-color: $secondary-color;
+}
+
+input:invalid {
+  border-color: #e74c3c;
+}
+
+// Responsive styles
+@media (max-width: 600px) {
+  form {
+    max-width: 100%;
+  }
+}
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information Form</title>
+</head>
+<body>
+
+<h1>User Information Form</h1>
+
+<form action="submit_form.php" method="post">
+        <!-- Username -->
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+
+<!-- Password -->
+<label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+
+<!-- Age -->
+<label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+        <br>
+
+<!-- Email -->
+<label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+
+<!-- Submit Button -->
+<input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>
