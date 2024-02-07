@@ -8,10 +8,10 @@
   @mixin button {
     width: auto;
     height: auto;
-    border-radius: 10px;
-    background-color: #21807c;
+    border-radius: 5px;
+    background-color: #728021;
     border: 3px solid black;
-    font-size: 1.5em;
+    font-size: 2.5em;
 
     display: flex;
     justify-content: center;
@@ -31,7 +31,7 @@
 
    /* darkens the background color on hover to create a selecting effect */
   .button:hover {
-    background-color: #373737;
+    background-color: #903f3f;
   }
 
   /* "row style" is flexible size and aligns pictures in center */
