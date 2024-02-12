@@ -8,7 +8,6 @@ title: Index
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heart Rate Analysis</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Heart Rate Analysis</h1>
@@ -23,11 +22,8 @@ title: Index
             <input type="number" id="smoke" name="smoke" required><br><br>
             <label for="sex">Gender (0 for Female, 1 for Male):</label>
             <input type="number" id="sex" name="sex" required><br><br>
-            <label for="exercise">Level of Exercise:</label>
-            <select id="exercise" name="exercise" required>
-                <option value="1">No Exercise</option>
-                <option value="2">Exercise</option>
-            </select><br><br>
+            <label for="exercise">Level of Exercise (1, 2, or 3):</label>
+            <input type="number" id="exercise" name="exercise" required min="1" max="3"><br><br>
             <label for="hgt">Height (in inches):</label>
             <input type="number" id="hgt" name="hgt" required><br><br>
             <label for="wgt">Weight (in pounds):</label>
@@ -51,38 +47,54 @@ title: Index
             const height = document.getElementById("hgt").value;
             const weight = document.getElementById("wgt").value;
             
-            fetch(`http://127.0.0.1:5000/api/heartrate/?activePulse=${activePulse}&restingPulse=${restingPulse}&smoking=${smoking}&gender=${gender}&exercise=${exercise}&height=${height}&weight=${weight}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Heart rate data not found');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Response:', data); // Log the response to the console
-                    if (data && data.averageHeartRate && typeof data.averageHeartRate.gender !== 'undefined' && typeof data.averageHeartRate.exercise !== 'undefined') {
-                        // Proceed with processing the data
-                        console.log('Gender:', data.averageHeartRate.gender);
-                        console.log('Exercise Level:', data.averageHeartRate.exercise);
+            const data = {
+                "Active": activePulse,
+                "Rest": restingPulse,
+                "Smoke": smoking,
+                "Sex": gender,
+                "Exercise": exercise,
+                "Hgt": height,
+                "Wgt": weight
+            };
 
-                        // Display the data or perform further actions here
-                        document.getElementById("heartRateStats").innerText = `Average heart rate - Gender: ${data.averageHeartRate.gender}, Exercise Level: ${data.averageHeartRate.exercise}`;
+            fetch(`http://127.0.0.1:5000/api/heartrate/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify([data])
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Heart rate data not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response:', data); // Log the response to the console
+                if (data && data.averageHeartRate && typeof data.averageHeartRate.gender !== 'undefined' && typeof data.averageHeartRate.exercise !== 'undefined') {
+                    // Proceed with processing the data
+                    console.log('Gender:', data.averageHeartRate.gender);
+                    console.log('Exercise Level:', data.averageHeartRate.exercise);
 
-                        if (myChart) {
-                            myChart.destroy();
-                        }
+                    // Display the data or perform further actions here
+                    document.getElementById("heartRateStats").innerText = `Average heart rate - Gender: ${data.averageHeartRate.gender}, Exercise Level: ${data.averageHeartRate.exercise}`;
 
-                        generateGraph(data);
-                    } else {
-                        throw new Error('Invalid data format');
-                    }
-                })
-                .catch(error => {
-                    document.getElementById("heartRateStats").innerText = error.message;
                     if (myChart) {
                         myChart.destroy();
                     }
-                });
+
+                    generateGraph(data);
+                } else {
+                    throw new Error('Invalid data format');
+                }
+            })
+            .catch(error => {
+                document.getElementById("heartRateStats").innerText = error.message;
+                if (myChart) {
+                    myChart.destroy();
+                }
+            });
         }
 
         function generateGraph(data) {
@@ -130,6 +142,7 @@ title: Index
             for(const mutation of mutationsList) {
                 if (mutation.type === 'childList') {
                     console.log('A child node has been added or removed.');
+                    // Call your function to handle the mutation here
                 }
             }
         };
@@ -142,4 +155,3 @@ title: Index
     </script>
 </body>
 </html>
-
