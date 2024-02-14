@@ -36,6 +36,58 @@ title: Drink
     </thead>
 </table>
 
+<div id="editModalBackdrop" class="modal-backdrop">
+	<div id="editModal" class="modal-content">
+		<button id="closeModal" class="close-modal">X</button>
+		<form id="editForm">
+			<label for="editDrinkName">Drink Name:</label>
+			<input type="text" id="editDrinkName" name="editDrinkName" /><br /><br />
+            <label for="editCalories">Calories:</label>
+			<input type="text" id="editCalories" name="editCalories" /><br /><br />
+			<input type="submit" value="Update" />
+		</form>
+	</div>
+</div>
+
+<style>
+	.modal-backdrop {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.7);
+		z-index: 1;
+	}
+
+	.modal-content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #272726;
+		padding: 40px;
+		z-index: 2;
+	}
+
+	.close-modal {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		cursor: pointer;
+		background: none;
+		border: none;
+		font-size: 24px;
+		color: white;
+	}
+
+	.wrapper,
+	section {
+		max-width: 900px;
+	}
+</style>
+
 
 <script type="module">
     import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
@@ -78,7 +130,7 @@ title: Drink
                 const editCell = row.insertCell();
                 const editButton = document.createElement("button");
                 editButton.innerHTML = "Edit";
-                editButton.addEventListener("click", () => editDrink(drink.id));
+                editButton.addEventListener("click", () => editDrink(drink.drinkName, drink.calories));
                 editCell.appendChild(editButton);
 
                 const deleteCell = row.insertCell();
@@ -93,9 +145,17 @@ title: Drink
         });
     }
 
-    function editDrink(drinkId) {
-        // Implement edit functionality based on the drinkId
-        console.log('Edit Drink:', drinkId);
+    // function to show Edit drink form pop up
+    function editDrink(drinkName, calories) {
+        // Implement edit functionalitydrinkName based on the drinkId
+        console.log('Edit Drink:', drinkName);
+        
+        const form = document.getElementById("editForm");
+
+		form.querySelector("#editDrinkName").value = drinkName;
+		form.querySelector("#editCalories").value = calories;
+
+        document.getElementById("editModalBackdrop").style.display = "block"; // show pop up edit modal
     }
 
     function deleteDrink(drinkName, row) {
@@ -135,9 +195,9 @@ title: Drink
     	// Fetch users and ensure close modal interaction
 	document.addEventListener("DOMContentLoaded", function () {
 		loadItems();
-		//document.getElementById("closeModal").addEventListener("click", function //() {
-		//	document.getElementById("editModalBackdrop").style.display = "none";
-		//});
+		document.getElementById("closeModal").addEventListener("click", function () {
+			document.getElementById("editModalBackdrop").style.display = "none"; // close pop up edit form
+		});
 	});
 
     //create method
@@ -180,6 +240,7 @@ title: Drink
         .catch((error) => console.error("Error:", error));
     }
 
+    //function to get details on one drink
     function getOneDrink(event) {
         event.preventDefault();
         //const formData = new FormData(event.target);
