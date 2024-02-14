@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Drink
+title: Fitness Recs
 ---
 
 <html lang="en">
@@ -10,7 +10,7 @@ title: Drink
     <title>Fitness Recs</title>
     <style>
        body {
-    background-color: #333; /* Replace #f0f0f0 with your desired background color */
+    background-color: #fce4ec; /* Replace #f0f0f0 with your desired background color */
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
@@ -125,7 +125,7 @@ title: Drink
             const jsonData = {};
             formData.forEach((value, key) => {jsonData[key] = value});
 
-            fetch('http://127.0.0.1:5000/api/fitnessy', {
+            fetch('http://127.0.0.1:8086/api/fitness', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
