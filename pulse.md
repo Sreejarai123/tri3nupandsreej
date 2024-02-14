@@ -2,92 +2,106 @@
 layout: default
 title: Index
 ---
-# Heart Rate Analysis
-
-Enter your age and heart rate below:
-
-Age: <input type="number" id="ageInput" min="1" max="120">
-Heart Rate: <input type="number" id="heartRateInput" min="1" max="300">
-
-<button onclick="analyzeHeartRate()">Analyze</button>
-
-<p id="analysisResult"></p>
-
-<div style="width: 800px; height: 400px;">
-    <canvas id="heartRateChart"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    function analyzeHeartRate() {
-        var age = document.getElementById('ageInput').value;
-        var heartRate = document.getElementById('heartRateInput').value;
-
-        var maxHeartRate = 220 - age;
-
-        var healthyRangeMin = 0.5 * maxHeartRate;
-        var healthyRangeMax = 0.85 * maxHeartRate;
-
-        var analysisResult = document.getElementById('analysisResult');
-
-        if (heartRate < healthyRangeMin) {
-            analysisResult.innerText = 'Your heart rate is below the healthy range.';
-        } else if (heartRate >= healthyRangeMin && heartRate <= healthyRangeMax) {
-            analysisResult.innerText = 'Your heart rate is within the healthy range.';
-        } else {
-            analysisResult.innerText = 'Your heart rate is above the healthy range.';
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resting Heart Rate Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fce4ec; /* Light pink background */
+            color: #333; /* Dark text color */
         }
 
-        var ctx = document.getElementById('heartRateChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['0-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-110'],
-                datasets: [{
-                    label: '0-10 Years',
-                    data: [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130],
-                    borderColor: 'rgba(255, 182, 193, 1)',
-                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
-                    borderWidth: 1
-                }, {
-                    label: '11-20 Years',
-                    data: [85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135],
-                    borderColor: 'rgba(255, 182, 193, 1)',
-                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
-                    borderWidth: 1
-                }, {
-                    label: '21-30 Years',
-                    data: [90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140],
-                    borderColor: 'rgba(255, 182, 193, 1)',
-                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
-                    borderWidth: 1
-                }, {
-                    label: '31-40 Years',
-                    data: [95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145],
-                    borderColor: 'rgba(255, 182, 193, 1)',
-                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Average Heart Rate (bpm)'
-                        }
-                    }],
-                    xAxes: [{
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Age Group (years)'
-                        }
-                    }]
-                }
-            }
-        });
-    }
-</script>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff; /* White container background */
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            text-align: center;
+        }
 
+        input[type="number"] {
+            width: 100px;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background-color: #ff4081; /* Pink button background */
+            color: #fff; /* White button text color */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff80ab; /* Lighter pink on hover */
+        }
+
+        p#result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Resting Heart Rate Game</h1>
+        <p>Guess the average resting heart rate for your age!</p>
+        <label for="ageInput">Enter your age:</label>
+        <input type="number" id="ageInput" min="1" max="120">
+        <button onclick="playGame()">Guess</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function playGame() {
+            var age = parseInt(document.getElementById('ageInput').value);
+            var averageHeartRate = calculateAverageHeartRate(age);
+            var userGuess = parseInt(prompt("Guess the average resting heart rate for your age:"));
+            
+            var resultParagraph = document.getElementById('result');
+            if (userGuess === averageHeartRate) {
+                resultParagraph.textContent = "Congratulations! You guessed it right!";
+            } else {
+                resultParagraph.textContent = "Sorry, the average resting heart rate for your age is " + averageHeartRate + " bpm.";
+            }
+        }
+
+        // Function to calculate average resting heart rate based on age
+        function calculateAverageHeartRate(age) {
+            if (age >= 0 && age <= 10) {
+                return 100;
+            } else if (age >= 11 && age <= 20) {
+                return 90;
+            } else if (age >= 21 && age <= 30) {
+                return 80;
+            } else if (age >= 31 && age <= 40) {
+                return 75;
+            } else if (age >= 41 && age <= 50) {
+                return 70;
+            } else if (age >= 51 && age <= 60) {
+                return 65;
+            } else if (age >= 61 && age <= 70) {
+                return 60;
+            } else if (age >= 71 && age <= 80) {
+                return 65;
+            } else if (age >= 81 && age <= 90) {
+                return 70;
+            } else if (age >= 91 && age <= 100) {
+                return 75;
+            } else {
+                return 80; // Default value
+            }
+        }
+    </script>
+</body>
+</html>
