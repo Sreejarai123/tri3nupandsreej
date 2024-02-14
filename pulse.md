@@ -2,156 +2,92 @@
 layout: default
 title: Index
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heart Rate Analysis</title>
-</head>
-<body>
-    <h1>Heart Rate Analysis</h1>
-    
-    <form onsubmit="submitHeartRate(); return false;">
-        <div>
-            <label for="active">Active Pulse Rate:</label>
-            <input type="number" id="active" name="active" required><br><br>
-            <label for="rest">Resting Pulse Rate:</label>
-            <input type="number" id="rest" name="rest" required><br><br>
-            <label for="smoke">Do you smoke? (0 for No, 1 for Yes):</label>
-            <input type="number" id="smoke" name="smoke" required><br><br>
-            <label for="sex">Gender (0 for Female, 1 for Male):</label>
-            <input type="number" id="sex" name="sex" required><br><br>
-            <label for="exercise">Level of Exercise (1, 2, or 3):</label>
-            <input type="number" id="exercise" name="exercise" required min="1" max="3"><br><br>
-            <label for="hgt">Height (in inches):</label>
-            <input type="number" id="hgt" name="hgt" required><br><br>
-            <label for="wgt">Weight (in pounds):</label>
-            <input type="number" id="wgt" name="wgt" required><br><br>
-            <input type="submit" value="Submit">
-        </div>
-    </form>
+# Heart Rate Analysis
 
-    <div id="heartRateStats"></div>
-    <canvas id="heartRateGraph" width="800" height="600"></canvas>
+Enter your age and heart rate below:
 
-    <script>
-        let myChart = null;
+Age: <input type="number" id="ageInput" min="1" max="120">
+Heart Rate: <input type="number" id="heartRateInput" min="1" max="300">
 
-        function submitHeartRate() {
-            const activePulse = document.getElementById("active").value;
-            const restingPulse = document.getElementById("rest").value;
-            const smoking = document.getElementById("smoke").value;
-            const gender = document.getElementById("sex").value;
-            const exercise = document.getElementById("exercise").value;
-            const height = document.getElementById("hgt").value;
-            const weight = document.getElementById("wgt").value;
-            
-            const data = {
-                "Active": activePulse,
-                "Rest": restingPulse,
-                "Smoke": smoking,
-                "Sex": gender,
-                "Exercise": exercise,
-                "Hgt": height,
-                "Wgt": weight
-            };
+<button onclick="analyzeHeartRate()">Analyze</button>
 
-            fetch(`http://127.0.0.1:5000/api/heartrate/create`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify([data])
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Heart rate data not found');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Response:', data); // Log the response to the console
-                if (data && data.averageHeartRate && typeof data.averageHeartRate.gender !== 'undefined' && typeof data.averageHeartRate.exercise !== 'undefined') {
-                    // Proceed with processing the data
-                    console.log('Gender:', data.averageHeartRate.gender);
-                    console.log('Exercise Level:', data.averageHeartRate.exercise);
+<p id="analysisResult"></p>
 
-                    // Display the data or perform further actions here
-                    document.getElementById("heartRateStats").innerText = `Average heart rate - Gender: ${data.averageHeartRate.gender}, Exercise Level: ${data.averageHeartRate.exercise}`;
+<div style="width: 800px; height: 400px;">
+    <canvas id="heartRateChart"></canvas>
+</div>
 
-                    if (myChart) {
-                        myChart.destroy();
-                    }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    function analyzeHeartRate() {
+        var age = document.getElementById('ageInput').value;
+        var heartRate = document.getElementById('heartRateInput').value;
 
-                    generateGraph(data);
-                } else {
-                    throw new Error('Invalid data format');
-                }
-            })
-            .catch(error => {
-                document.getElementById("heartRateStats").innerText = error.message;
-                if (myChart) {
-                    myChart.destroy();
-                }
-            });
+        var maxHeartRate = 220 - age;
+
+        var healthyRangeMin = 0.5 * maxHeartRate;
+        var healthyRangeMax = 0.85 * maxHeartRate;
+
+        var analysisResult = document.getElementById('analysisResult');
+
+        if (heartRate < healthyRangeMin) {
+            analysisResult.innerText = 'Your heart rate is below the healthy range.';
+        } else if (heartRate >= healthyRangeMin && heartRate <= healthyRangeMax) {
+            analysisResult.innerText = 'Your heart rate is within the healthy range.';
+        } else {
+            analysisResult.innerText = 'Your heart rate is above the healthy range.';
         }
 
-        function generateGraph(data) {
-            const chartData = {
-                labels: ['Gender', 'Exercise Level'],
-                datasets: [
-                    {
-                        label: 'Average Heart Rate',
-                        data: [data.averageHeartRate.gender, data.averageHeartRate.exercise],
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.2)',
-                            'rgba(54, 162, 235, 0.2)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)'
-                        ],
-                        borderWidth: 1
-                    }
-                ]
-            };
-
-            const ctx = document.getElementById('heartRateGraph').getContext('2d');
-            myChart = new Chart(ctx, {
-                type: 'bar',
-                data: chartData,
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
+        var ctx = document.getElementById('heartRateChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['0-10', '11-20', '21-30', '31-40', '41-50', '51-60', '61-70', '71-80', '81-90', '91-100', '101-110'],
+                datasets: [{
+                    label: '0-10 Years',
+                    data: [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130],
+                    borderColor: 'rgba(255, 182, 193, 1)',
+                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
+                    borderWidth: 1
+                }, {
+                    label: '11-20 Years',
+                    data: [85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135],
+                    borderColor: 'rgba(255, 182, 193, 1)',
+                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
+                    borderWidth: 1
+                }, {
+                    label: '21-30 Years',
+                    data: [90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140],
+                    borderColor: 'rgba(255, 182, 193, 1)',
+                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
+                    borderWidth: 1
+                }, {
+                    label: '31-40 Years',
+                    data: [95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145],
+                    borderColor: 'rgba(255, 182, 193, 1)',
+                    backgroundColor: 'rgba(255, 182, 193, 0.2)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Average Heart Rate (bpm)'
                         }
-                    }
-                }
-            });
-        }
-
-        // Select the node that will be observed for mutations
-        const targetNode = document.getElementById('heartRateStats');
-
-        // Options for the observer (which mutations to observe)
-        const config = { childList: true };
-
-        // Callback function to execute when mutations are observed
-        const callback = function(mutationsList, observer) {
-            for(const mutation of mutationsList) {
-                if (mutation.type === 'childList') {
-                    console.log('A child node has been added or removed.');
-                    // Call your function to handle the mutation here
+                    }],
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Age Group (years)'
+                        }
+                    }]
                 }
             }
-        };
+        });
+    }
+</script>
 
-        // Create an observer instance linked to the callback function
-        const observer = new MutationObserver(callback);
-
-        // Start observing the target node for configured mutations
-        observer.observe(targetNode, config);
-    </script>
-</body>
-</html>
