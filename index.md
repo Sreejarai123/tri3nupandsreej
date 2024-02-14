@@ -2,53 +2,63 @@
 layout: default
 title: Index
 ---
-<div class="login-container">
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parallax Scrolling</title>
+    <style>
+        /* Add some basic styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        
+        .parallax-container {
+            height: 200%; /* Set the height to 200% to allow for scrolling */
+            width: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+            margin-bottom: 10px; /* Leave 10px of blank space at the bottom */
+        }
+
+        .parallax-image {
+            background-size: cover;
+            background-position: center;
+            height: calc(70vh - 3px); /* Set the height to 50% of the viewport height minus 3 pixels */
+            width: 100%;
+            border: 8px ;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: calc(10vh + 3px); /* Center the image vertically */
+        }
 
 
-<form action="javascript:login_user()">
-    <label for="uid"><b>Username</b></label>
-    <input type="text" id="uid" placeholder="Enter Username" name="uid" required>
-    <label for="password"><b>Password</b></label>
-    <input type="password" id="password" placeholder="Enter Password" name="password" required>
-    <button class='button'>Log in</button>
-    <div>
-    <span class="psw">Need an account? <a href="{{site.baseurl}}/signup"> Sign Up</a></span>
-    <span class="psw2">Want to delete an account? <a href="{{site.baseurl}}/delete"> Delete</a></span>
-    </div>
-    <div>
-    <div id="error-message" style="color: red;"></div>
-    <!-- <span class="psw">Want to delete? <a href="{{site.baseurl}}/delete"> Delete</a></span> -->
-    </div>
+        /* Create the parallax scrolling effect */
+        .parallax-image {
+            background-attachment: fixed;
+        }
 
-</form>
-<script type="module">
-    import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
-    function login_user(){
-        const url = uri + '/api/users/authenticate';
-        const body = {
-            uid: document.getElementById("uid").value,
-            password: document.getElementById("password").value,
-        };
-        const authOptions = {
-            ...options, 
-            method: 'POST', 
-            cache: 'no-cache', 
-            body: JSON.stringify(body)
-        };
-        fetch(url, authOptions)
-        .then(response => {
-            if (!response.ok) {
-                const errorMsg = 'Login error: ' + response.status;
-                console.log(errorMsg);
-                document.getElementById("error-message").innerText = errorMsg; // Display error on the screen
-                return;
-            }
-            window.location.href = "{{site.baseurl}}/snake";
-        })
-        .catch(err => {
-            console.error(err);
-        });
-    }
-    window.login_user = login_user;
+        
+    </style>
+</head>
+<body>
 
-</script>
+<div class="parallax-container">
+    <div class="parallax-image" style="background-image: url('https://w0.peakpx.com/wallpaper/595/522/HD-wallpaper-grapefruit-lemonade-pink-drink-lemon-lime.jpg')"></div>
+    <div class="parallax-image" style="background-image: url('https://wallpapers.com/images/hd/heartbeat-neon-dark-pink-sdmjcfbn14ol4nvy.jpg')"></div>
+    <div class="parallax-image" style="background-image: url('https://img.freepik.com/premium-photo/bed-sleep-stands-pink-clouds-good-soft-sleep_124715-2921.jpg ')"></div>
+    <div class="parallax-image" style="background-image: url('https://images.squarespace-cdn.com/content/v1/5b147413a9e02837b93f4066/1587961394040-XMRUTY3OL4NT6B50TIXD/PopTennis-14x11.jpg')"></div>
+    <div class="parallax-bar bar1"></div>
+    <div class="parallax-bar bar2"></div>
+    <div class="parallax-bar bar3"></div>
+    <div class="parallax-bar bar4"></div>
+</div>
+
+</body>
+</html>
