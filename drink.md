@@ -48,6 +48,63 @@ title: Drink
 		</form>
 	</div>
 </div>
+<style>
+    /* ... (existing styles) ... */
+    /* Add styles for the table */
+    #DrinkTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    #DrinkTable th, #DrinkTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    #DrinkTable th {
+        background-color: #f2f2f2;
+    }
+    /* Add styles for the background */
+    body {
+        background-color: #e0e0e0; /* Set your desired background color */
+        font-family: Arial, sans-serif; /* Set your preferred font */
+    }
+    /* Adjust the modal styles */
+    .modal-backdrop {
+        /* ... (existing styles) ... */
+    }
+    .modal-content {
+        /* ... (existing styles) ... */
+        color: white; /* Set the text color inside the modal */
+    }
+    /* Add styles for form labels */
+    form label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    /* Add styles for buttons */
+    button {
+        background-color: #4caf50; /* Green background color */
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    /* Style the edit and delete buttons in the table */
+    #DrinkTable button {
+        background-color: #2196F3; /* Blue background color */
+        color: white;
+        padding: 5px 10px;
+        margin: 2px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+</style>
+
+
+
 
 <style>
 	.modal-backdrop {
@@ -273,3 +330,9 @@ title: Drink
         .catch((error) => console.error("Error:", error));
     }
 </script>
+
+
+### Getting less than 10 percent of daily calories from beverages: At least half of your daily fluid should come from water.
+
+
+### On average, a woman should eat 2000 calories per day to maintain her weight, and she should limit her caloric intake to 1500 or less in order to lose one pound per week. For the average male to maintain his body weight, he should eat 2500 calories per day, or 2000 a day if he wants to lose one pound per week.
