@@ -2,7 +2,7 @@
 layout: default
 title: Login
 ---
-
+# Login Page
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -100,6 +100,4 @@ title: Login
 
 </script>
 
-
-</body>
 </html>
