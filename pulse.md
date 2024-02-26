@@ -3,51 +3,63 @@ layout: default
 title: Pulse
 ---
 
-<h3>Get information about your heart rate</h3>
-<form id="formToGetOnePulseDetail">
-    <label for="Pulse"><b>Pulse number to get details:</b></label>
-    <input type="text" id="Pulse" name="Pulse" /><br /><br />
-    <button type="submit" value="btnToGetPulseDetail" id="get_pulsey">GetPulseDetails</button>
-    <div id="getOnePulseDetailResponse"></div>
-</form>
-<br><br><br>
+<div style="text-align: center; padding: 20px;">
+    <h1 style="color: #ff66cc; font-size: 36px;">Welcome to the Pulse page!</h1>
+    <p style="color: #ff66cc; font-size: 18px;">Here you can store information about your heartrate and how much you exercise!!</p>
+</div>
 
+<div style="display: flex; justify-content: center; margin-bottom: 30px;">
+    <div style="width: 50%; background-color: #ffecf2; padding: 20px; border-radius: 15px;">
+        <h2 style="color: #ff66cc;">Enter your pulse number to see on average how much exercise people do to have that heartrate</h2>
+        <form id="formToGetOnePulseDetail">
+            <label for="Pulse" style="color: #ff66cc;">Pulse number to get details:</label><br />
+            <input type="text" id="Pulse" name="Pulse" style="padding: 8px; border-radius: 5px; margin-bottom: 10px;"><br />
+            <button type="submit" value="btnToGetPulseDetail" id="get_pulsey" style="background-color: #ff66cc; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Submit</button>
+        </form>
+    </div>
+</div>
 
-<h3>Create a new Pulse</h3>
-<form id="myForm">
-    <label for="Pulse">New Pulse number:</label>
-    <input type="text" id="Pulse" name="Pulse" /><br /><br />
-    <label for="Exercise">Exercise</label>
-    <input type="text" id="Exercise" name="Exercise" /><br /><br />
-    <button type="submit" value="Submit" id="create_pulsey">CreateNewPulse</button>
-</form>
-<br><br>
+<div style="display: flex; justify-content: center;">
+    <div style="width: 50%; background-color: #ffecf2; padding: 20px; border-radius: 15px;">
+        <h2 style="color: #ff66cc;">Add a new pulse number</h2>
+        <form id="myForm">
+            <label for="Pulse" style="color: #ff66cc;">What is your pulse rate now?</label><br />
+            <input type="text" id="Pulse" name="Pulse" style="padding: 8px; border-radius: 5px; margin-bottom: 10px;"><br />
+            <label for="Exercise" style="color: #ff66cc;">What level of exercise did you just do? - 1 for none, 2 for mild, 3 for extreme</label><br />
+            <input type="text" id="Exercise" name="Exercise" style="padding: 8px; border-radius: 5px; margin-bottom: 10px;"><br />
+            <button type="submit" value="Submit" id="create_pulsey" style="background-color: #ff66cc; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">Submit</button>
+        </form>
+    </div>
+</div>
 
-<h3>All Pulses</h3>
-<table id="PulseTable">
-    <!-- Table headers go here -->
-    <thead>
-        <tr>
-            <th>Pulse Number</th>
-            <th>Exercise</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-    </thead>
-</table>
+<div style="text-align: center; margin-top: 30px;">
+    <h2 style="color: #ff66cc;">Pulse Data from all users</h2>
+    <table id="PulseTable" style="border-collapse: collapse; width: 80%; margin: 0 auto;">
+        <thead>
+            <tr>
+                <th style="background-color: #ff66cc; color: white; padding: 10px;">Pulse Number</th>
+                <th style="background-color: #ff66cc; color: white; padding: 10px;">Exercise</th>
+                <th style="background-color: #ff66cc; color: white; padding: 10px;">Edit</th>
+                <th style="background-color: #ff66cc; color: white; padding: 10px;">Delete</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
 <div id="editModalBackdrop" class="modal-backdrop">
 	<div id="editModal" class="modal-content">
 		<button id="closeModal" class="close-modal">X</button>
 		<form id="editForm">
-			<label for="editActive">Pulse Number</label>
-			<input type="text" id="editActive" name="editActive" /><br /><br />
-            <label for="editExercise">Exercise</label>
-			<input type="text" id="editExercise" name="editExercise" /><br /><br />
-			<input type="submit" value="Update" />
+			<label for="editActive" style="color: #ff66cc;">Pulse Number</label><br />
+			<input type="text" id="editActive" name="editActive" style="padding: 8px; border-radius: 5px; margin-bottom: 10px;"><br />
+            <label for="editExercise" style="color: #ff66cc;">Exercise</label><br />
+			<input type="text" id="editExercise" name="editExercise" style="padding: 8px; border-radius: 5px; margin-bottom: 10px;"><br />
+			<input type="submit" value="Update" style="background-color: #ff66cc; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
 		</form>
 	</div>
 </div>
+
 <style>
     /* ... (existing styles) ... */
     /* Add styles for the table */
@@ -66,7 +78,7 @@ title: Pulse
     }
     /* Add styles for the background */
     body {
-        background-color: #e0e0e0; /* Set your desired background color */
+        background-color: #ffe6f2; /* Light pink background color */
         font-family: Arial, sans-serif; /* Set your preferred font */
     }
     /* Adjust the modal styles */
@@ -84,7 +96,7 @@ title: Pulse
     }
     /* Add styles for buttons */
     button {
-        background-color: #4caf50; /* Green background color */
+        background-color: #ff66cc; /* Pink background color */
         color: white;
         padding: 10px 15px;
         border: none;
@@ -93,7 +105,7 @@ title: Pulse
     }
     /* Style the edit and delete buttons in the table */
     #PulseTable button {
-        background-color: #2196F3; /* Blue background color */
+        background-color: #ff3399; /* Dark pink background color */
         color: white;
         padding: 5px 10px;
         margin: 2px;
@@ -103,9 +115,6 @@ title: Pulse
     }
 </style>
 
-
-
-
 <style>
 	.modal-backdrop {
 		display: none;
@@ -114,7 +123,7 @@ title: Pulse
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.7);
+		background-color: rgba(255, 192, 203, 0.7); /* Light pink background color */
 		z-index: 1;
 	}
 
@@ -123,7 +132,7 @@ title: Pulse
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
-		background: #272726;
+		background: #ff66cc; /* Pink background color */
 		padding: 40px;
 		z-index: 2;
 	}
@@ -331,5 +340,54 @@ title: Pulse
     }
 </script>
 
+<style>
+/* Add styles for markdown content */
+body {
+    background-color: #ffe6f2; /* Light pink background color */
+    font-family: Arial, sans-serif; /* Set your preferred font */
+    color: #661a33; /* Dark pink text color */
+}
 
-### ADD STUFF ABOUT PULSE
+/* Style the headers */
+h1, h2, h3 {
+    color: #ff66cc; /* Dark pink header color */
+}
+
+/* Style the bullet points */
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+/* Style the list items */
+li::before {
+    content: "•";
+    color: #ff66cc; /* Dark pink bullet color */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+/* Add a border around the content */
+.container {
+    border: 2px solid #ff66cc; /* Dark pink border color */
+    border-radius: 15px; /* Rounded corners */
+    padding: 20px; /* Add padding */
+    margin-bottom: 20px; /* Add margin */
+}
+</style>
+
+### Enhance Your Pulse Experience
+
+Taking care of your pulse and exercise routine is crucial for maintaining a healthy lifestyle. Here are some tips to help you make the most of your pulse data:
+
+1. **Monitor Your Pulse Effectively**: During workouts, keep an eye on your pulse to ensure you're exercising within a safe and effective range. Use your pulse readings as a guide to adjust the intensity of your workouts and avoid overexertion.
+
+2. **Maintain a Healthy Heart Rate**: Understanding your target heart rate zone can help you optimize your workouts for maximum benefit. Aim to keep your pulse within 50-85% of your maximum heart rate during exercise to improve cardiovascular fitness and endurance.
+
+3. **Optimize Exercise Intensity**: Adjust your exercise intensity based on your pulse readings and fitness goals. Incorporate a mix of moderate and vigorous activities into your routine to challenge your cardiovascular system and improve overall health.
+
+4. **Stay Informed**: Educate yourself about the relationship between pulse, exercise, and overall health. Explore reputable resources to learn more about cardiovascular fitness, pulse monitoring techniques, and the importance of regular physical activity.
+
+By paying attention to your pulse and incorporating these tips into your routine, you can better manage your exercise regimen and support your long-term health and well-being.
