@@ -1,5 +1,6 @@
 ---
 layout: default
+comments: true
 title: Pulse
 ---
 
@@ -154,86 +155,90 @@ title: Pulse
 	}
 </style>
 
-
 <script type="module">
+    // Importing URI and options from config.js file
     import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
 
-    const API_URL = uri + '/api/pulses/'
-    const createbutton = document.getElementById("create_pulsey")
+    // Defining API_URL using imported URI
+    const API_URL = uri + '/api/pulses/';
+
+    // Getting create button element and adding event listener to it
+    const createbutton = document.getElementById("create_pulsey");
     createbutton.addEventListener("click", submitForm);
 
-    const getPulsebutton = document.getElementById("get_pulsey")
+    // Getting get pulse button element and adding event listener to it
+    const getPulsebutton = document.getElementById("get_pulsey");
     getPulsebutton.addEventListener("click", getOnePulse);
 
-    //Get all pulse items
+    // Function to load all pulse items
     function loadItems() {
         fetch(API_URL, {
             method: 'GET'
             // headers: options.headers,
             //body: JSON.stringify(body),
-        }) 
+        })
         .then((response) => response.json())
         .then(data => {
             displayItems(data);
         })
         .catch(error => {
-            console.error("Error calling get all pulses:", error)
+            console.error("Error calling get all pulses:", error);
         });
     }
 
+    // Function to display pulse items
     function displayItems(items) {
-            const table = document.getElementById("PulseTable");
+        const table = document.getElementById("PulseTable");
 
-            items.forEach((pulse) => {
-                const row = table.insertRow();
-                row.setAttribute("data-id", pulse.id);
+        items.forEach((pulse) => {
+            const row = table.insertRow();
+            row.setAttribute("data-id", pulse.id);
 
-                ["Active", "Exercise"].forEach((field) => {
-                    const cell = row.insertCell();
-                    cell.innerText = pulse[field];
-                });
+            ["Active", "Exercise"].forEach((field) => {
+                const cell = row.insertCell();
+                cell.innerText = pulse[field];
+            });
 
-                const editCell = row.insertCell();
-                const editButton = document.createElement("button");
-                editButton.innerHTML = "Edit";
-                editButton.addEventListener("click", () => editPulse(pulse.Active, pulse.Exercise));
-                editCell.appendChild(editButton);
+            const editCell = row.insertCell();
+            const editButton = document.createElement("button");
+            editButton.innerHTML = "Edit";
+            editButton.addEventListener("click", () => editPulse(pulse.Active, pulse.Exercise));
+            editCell.appendChild(editButton);
 
-                const deleteCell = row.insertCell();
-                const deleteButton = document.createElement("button");
-                deleteButton.innerText = "Delete";
-                //deleteButton.addEventListener("click", () => deletePulse(pulse.id, row));
-                deleteButton.addEventListener("click", () => deletePulse(pulse.Active,row));
-                deleteCell.appendChild(deleteButton);
-            })
-            .catch((error) => {
+            const deleteCell = row.insertCell();
+            const deleteButton = document.createElement("button");
+            deleteButton.innerText = "Delete";
+            //deleteButton.addEventListener("click", () => deletePulse(pulse.id, row));
+            deleteButton.addEventListener("click", () => deletePulse(pulse.Active,row));
+            deleteCell.appendChild(deleteButton);
+        })
+        .catch((error) => {
             console.error('Error:', error);
         });
     }
 
-    // function to show Edit pulse form pop up
+    // Function to show edit pulse form pop up
     function editPulse(Active, Exercise) {
-        // Implement edit functionalityActive based on the pulseId
         console.log('Edit Pulse:', Active);
         
         const form = document.getElementById("editForm");
 
-		form.querySelector("#editActive").value = Active;
-		form.querySelector("#editExercise").value = Exercise;
+        form.querySelector("#editActive").value = Active;
+        form.querySelector("#editExercise").value = Exercise;
 
         document.getElementById("editModalBackdrop").style.display = "block"; // show pop up edit modal
     }
 
+    // Function to delete pulse
     function deletePulse(Active, row) {
-        // Implement delete functionality based on the pulseId
         console.log('Delete Pulse:', Active);
 
         const confirmation = prompt('Type "DELETE" to confirm.');
-		if (confirmation === "DELETE") {
+        if (confirmation === "DELETE") {
             const payload = {
                 Active
             };
-            console.log(JSON.stringify(payload))
+            console.log(JSON.stringify(payload));
             
             fetch(API_URL, {
                 method: "DELETE",
@@ -244,7 +249,7 @@ title: Pulse
             })
             .then((response) => {
                 if (response.ok) {
-                    console.log("Successfully deleted",Active)
+                    console.log("Successfully deleted",Active);
                     location.reload();
                     return response.json();
                 } else {
@@ -252,28 +257,23 @@ title: Pulse
                     throw new Error("Server");
                 }
             })
-		}
+        }
 
         // Remove the row from the table
         //row.remove();
     }
 
-    	// Fetch users and ensure close modal interaction
-	document.addEventListener("DOMContentLoaded", function () {
-		loadItems();
-		document.getElementById("closeModal").addEventListener("click", function () {
-			document.getElementById("editModalBackdrop").style.display = "none"; // close pop up edit form
-		});
-	});
+    // Fetch users and ensure close modal interaction
+    document.addEventListener("DOMContentLoaded", function () {
+        loadItems();
+        document.getElementById("closeModal").addEventListener("click", function () {
+            document.getElementById("editModalBackdrop").style.display = "none"; // close pop up edit form
+        });
+    });
 
-    //create method
+    // Function to submit form
     function submitForm(event) {
-
         event.preventDefault();
-        //const formData = new FormData(event.target);
-        //const pulse = formData.get("Pulse");
-        //console.log("got form data Pulse")
-        //const exercise = formData.get("Exercise");
 
         const form = document.getElementById('myForm')
         const Active = form.elements['Pulse'].value
@@ -283,7 +283,7 @@ title: Pulse
             Active,
             Exercise,
         };
-        console.log(JSON.stringify(payload))
+        console.log(JSON.stringify(payload));
 
         fetch(API_URL, {
             method: "POST",
@@ -301,25 +301,20 @@ title: Pulse
             }
         })
         .then((data) => {
-            location.reload()
+            location.reload();
         })
         .catch((error) => console.error("Error:", error));
     }
 
-    //function to get details on one pulse
+    // Function to get details on one pulse
     function getOnePulse(event) {
         event.preventDefault();
-        //const formData = new FormData(event.target);
-        //const pulse = formData.get("Pulse");
-        //console.log("got form data Pulse")
-        //const exercise = formData.get("Exercise");
 
         const form = document.getElementById('formToGetOnePulseDetail')
         const Active = form.elements['Pulse'].value
         const responseDiv = document.getElementById('getOnePulseDetailResponse')
 
-
-        const URL_FOR_GetOne = API_URL + Active
+        const URL_FOR_GetOne = API_URL + Active;
 
         fetch(URL_FOR_GetOne, {
             method: "GET"
@@ -333,8 +328,8 @@ title: Pulse
             }
         })
         .then((data) => {
-            console.log(data)
-            responseDiv.textContent =  data[0]['Active'] + " has " + data[0]['exercise'] + " exercise"
+            console.log(data);
+            responseDiv.textContent =  data[0]['Active'] + " has " + data[0]['exercise'] + " exercise";
         })
         .catch((error) => console.error("Error:", error));
     }
