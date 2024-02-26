@@ -1,107 +1,335 @@
 ---
 layout: default
-title: Index
+title: Pulse
 ---
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resting Heart Rate Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fce4ec; /* Light pink background */
-            color: #333; /* Dark text color */
-        }
 
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #fff; /* White container background */
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow effect */
-            text-align: center;
-        }
+<h3>Get information about your heart rate</h3>
+<form id="formToGetOnePulseDetail">
+    <label for="Pulse"><b>Pulse number to get details:</b></label>
+    <input type="text" id="Pulse" name="Pulse" /><br /><br />
+    <button type="submit" value="btnToGetPulseDetail" id="get_pulsey">GetPulseDetails</button>
+    <div id="getOnePulseDetailResponse"></div>
+</form>
+<br><br><br>
 
-        input[type="number"] {
-            width: 100px;
-            padding: 10px;
-            margin: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
 
-        button {
-            background-color: #ff4081; /* Pink button background */
-            color: #fff; /* White button text color */
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+<h3>Create a new Pulse</h3>
+<form id="myForm">
+    <label for="Pulse">New Pulse number:</label>
+    <input type="text" id="Pulse" name="Pulse" /><br /><br />
+    <label for="Exercise">Exercise</label>
+    <input type="text" id="Exercise" name="Exercise" /><br /><br />
+    <button type="submit" value="Submit" id="create_pulsey">CreateNewPulse</button>
+</form>
+<br><br>
 
-        button:hover {
-            background-color: #ff80ab; /* Lighter pink on hover */
-        }
+<h3>All Pulses</h3>
+<table id="PulseTable">
+    <!-- Table headers go here -->
+    <thead>
+        <tr>
+            <th>Pulse Number</th>
+            <th>Exercise</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+</table>
 
-        p#result {
-            font-size: 18px;
-            margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Resting Heart Rate Game</h1>
-        <p>Guess the average resting heart rate for your age!</p>
-        <label for="ageInput">Enter your age:</label>
-        <input type="number" id="ageInput" min="1" max="120">
-        <button onclick="playGame()">Guess</button>
-        <p id="result"></p>
-    </div>
+<div id="editModalBackdrop" class="modal-backdrop">
+	<div id="editModal" class="modal-content">
+		<button id="closeModal" class="close-modal">X</button>
+		<form id="editForm">
+			<label for="editActive">Pulse Number</label>
+			<input type="text" id="editActive" name="editActive" /><br /><br />
+            <label for="editExercise">Exercise</label>
+			<input type="text" id="editExercise" name="editExercise" /><br /><br />
+			<input type="submit" value="Update" />
+		</form>
+	</div>
+</div>
+<style>
+    /* ... (existing styles) ... */
+    /* Add styles for the table */
+    #PulseTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    #PulseTable th, #PulseTable td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    #PulseTable th {
+        background-color: #f2f2f2;
+    }
+    /* Add styles for the background */
+    body {
+        background-color: #e0e0e0; /* Set your desired background color */
+        font-family: Arial, sans-serif; /* Set your preferred font */
+    }
+    /* Adjust the modal styles */
+    .modal-backdrop {
+        /* ... (existing styles) ... */
+    }
+    .modal-content {
+        /* ... (existing styles) ... */
+        color: white; /* Set the text color inside the modal */
+    }
+    /* Add styles for form labels */
+    form label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    /* Add styles for buttons */
+    button {
+        background-color: #4caf50; /* Green background color */
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    /* Style the edit and delete buttons in the table */
+    #PulseTable button {
+        background-color: #2196F3; /* Blue background color */
+        color: white;
+        padding: 5px 10px;
+        margin: 2px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+</style>
 
-    <script>
-        function playGame() {
-            var age = parseInt(document.getElementById('ageInput').value);
-            var averageHeartRate = calculateAverageHeartRate(age);
-            var userGuess = parseInt(prompt("Guess the average resting heart rate for your age:"));
+
+
+
+<style>
+	.modal-backdrop {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.7);
+		z-index: 1;
+	}
+
+	.modal-content {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background: #272726;
+		padding: 40px;
+		z-index: 2;
+	}
+
+	.close-modal {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		cursor: pointer;
+		background: none;
+		border: none;
+		font-size: 24px;
+		color: white;
+	}
+
+	.wrapper,
+	section {
+		max-width: 900px;
+	}
+</style>
+
+
+<script type="module">
+    import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
+
+    const API_URL = uri + '/api/pulses/'
+    const createbutton = document.getElementById("create_pulsey")
+    createbutton.addEventListener("click", submitForm);
+
+    const getPulsebutton = document.getElementById("get_pulsey")
+    getPulsebutton.addEventListener("click", getOnePulse);
+
+    //Get all pulse items
+    function loadItems() {
+        fetch(API_URL, {
+            method: 'GET'
+            // headers: options.headers,
+            //body: JSON.stringify(body),
+        }) 
+        .then((response) => response.json())
+        .then(data => {
+            displayItems(data);
+        })
+        .catch(error => {
+            console.error("Error calling get all pulses:", error)
+        });
+    }
+
+    function displayItems(items) {
+            const table = document.getElementById("PulseTable");
+
+            items.forEach((pulse) => {
+                const row = table.insertRow();
+                row.setAttribute("data-id", pulse.id);
+
+                ["Active", "Exercise"].forEach((field) => {
+                    const cell = row.insertCell();
+                    cell.innerText = pulse[field];
+                });
+
+                const editCell = row.insertCell();
+                const editButton = document.createElement("button");
+                editButton.innerHTML = "Edit";
+                editButton.addEventListener("click", () => editPulse(pulse.Active, pulse.Exercise));
+                editCell.appendChild(editButton);
+
+                const deleteCell = row.insertCell();
+                const deleteButton = document.createElement("button");
+                deleteButton.innerText = "Delete";
+                //deleteButton.addEventListener("click", () => deletePulse(pulse.id, row));
+                deleteButton.addEventListener("click", () => deletePulse(pulse.Active,row));
+                deleteCell.appendChild(deleteButton);
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+
+    // function to show Edit pulse form pop up
+    function editPulse(Active, Exercise) {
+        // Implement edit functionalityActive based on the pulseId
+        console.log('Edit Pulse:', Active);
+        
+        const form = document.getElementById("editForm");
+
+		form.querySelector("#editActive").value = Active;
+		form.querySelector("#editExercise").value = Exercise;
+
+        document.getElementById("editModalBackdrop").style.display = "block"; // show pop up edit modal
+    }
+
+    function deletePulse(Active, row) {
+        // Implement delete functionality based on the pulseId
+        console.log('Delete Pulse:', Active);
+
+        const confirmation = prompt('Type "DELETE" to confirm.');
+		if (confirmation === "DELETE") {
+            const payload = {
+                Active
+            };
+            console.log(JSON.stringify(payload))
             
-            var resultParagraph = document.getElementById('result');
-            if (userGuess === averageHeartRate) {
-                resultParagraph.textContent = "Congratulations! You guessed it right!";
-            } else {
-                resultParagraph.textContent = "Sorry, the average resting heart rate for your age is " + averageHeartRate + " bpm.";
-            }
-        }
+            fetch(API_URL, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload)
+            })
+            .then((response) => {
+                if (response.ok) {
+                    console.log("Successfully deleted",Active)
+                    location.reload();
+                    return response.json();
+                } else {
+                    alert("Server error");
+                    throw new Error("Server");
+                }
+            })
+		}
 
-        // Function to calculate average resting heart rate based on age
-        function calculateAverageHeartRate(age) {
-            if (age >= 0 && age <= 10) {
-                return 100;
-            } else if (age >= 11 && age <= 20) {
-                return 90;
-            } else if (age >= 21 && age <= 30) {
-                return 80;
-            } else if (age >= 31 && age <= 40) {
-                return 75;
-            } else if (age >= 41 && age <= 50) {
-                return 70;
-            } else if (age >= 51 && age <= 60) {
-                return 65;
-            } else if (age >= 61 && age <= 70) {
-                return 60;
-            } else if (age >= 71 && age <= 80) {
-                return 65;
-            } else if (age >= 81 && age <= 90) {
-                return 70;
-            } else if (age >= 91 && age <= 100) {
-                return 75;
+        // Remove the row from the table
+        //row.remove();
+    }
+
+    	// Fetch users and ensure close modal interaction
+	document.addEventListener("DOMContentLoaded", function () {
+		loadItems();
+		document.getElementById("closeModal").addEventListener("click", function () {
+			document.getElementById("editModalBackdrop").style.display = "none"; // close pop up edit form
+		});
+	});
+
+    //create method
+    function submitForm(event) {
+
+        event.preventDefault();
+        //const formData = new FormData(event.target);
+        //const pulse = formData.get("Pulse");
+        //console.log("got form data Pulse")
+        //const exercise = formData.get("Exercise");
+
+        const form = document.getElementById('myForm')
+        const Active = form.elements['Pulse'].value
+        const Exercise = parseInt(form.elements['Exercise'].value)
+        
+        const payload = {
+            Active,
+            Exercise,
+        };
+        console.log(JSON.stringify(payload))
+
+        fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
             } else {
-                return 80; // Default value
+                alert("Server error");
+                throw new Error("Server");
             }
-        }
-    </script>
-</body>
-</html>
+        })
+        .then((data) => {
+            location.reload()
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+
+    //function to get details on one pulse
+    function getOnePulse(event) {
+        event.preventDefault();
+        //const formData = new FormData(event.target);
+        //const pulse = formData.get("Pulse");
+        //console.log("got form data Pulse")
+        //const exercise = formData.get("Exercise");
+
+        const form = document.getElementById('formToGetOnePulseDetail')
+        const Active = form.elements['Pulse'].value
+        const responseDiv = document.getElementById('getOnePulseDetailResponse')
+
+
+        const URL_FOR_GetOne = API_URL + Active
+
+        fetch(URL_FOR_GetOne, {
+            method: "GET"
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                alert("Server error");
+                throw new Error("Server");
+            }
+        })
+        .then((data) => {
+            console.log(data)
+            responseDiv.textContent =  data[0]['Active'] + " has " + data[0]['exercise'] + " exercise"
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+</script>
+
+
+### ADD STUFF ABOUT PULSE
