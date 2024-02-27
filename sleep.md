@@ -88,6 +88,7 @@
         <input type="number" id="Sleep" name="Sleep" min="0"  />
         <button type="submit" value="btnToGetSleepDetail" id="get_sleepy">See Sleep Details</button>
         <div id="getOneSleepDetailResponse"></div>
+        <div id="sleepFacts"></div>
     </form> 
     <h3>All Sleep Data</h3>
     <table id="SleepTable">
@@ -123,7 +124,45 @@
 </html>
 
 <script type="module">
-    import { uri, options } from '{{site.baseurl}}/assets/js/api/config.js';
+        function displaySleepFacts(hoursSlept) {
+            const factsContainer = document.getElementById("sleepFacts");
+            factsContainer.innerHTML = ""; // Clear existing facts
+
+            let fact = "";
+
+            if (hoursSlept < 7) {
+                // Facts about too little sleep
+                const tooLittleFacts = [
+                    "Lack of sleep can impair cognitive function.",
+                    "Chronic sleep deprivation may increase the risk of heart disease.",
+                    "Sleep deprivation can lead to mood swings and irritability.",
+                    "Insufficient sleep has been linked to an increased risk of obesity and metabolic disorders due to disruptions in hormone regulation.",
+                    "Prolonged sleep deprivation may elevate stress levels and contribute to the development of mental health disorders such as anxiety and depression."
+                ];
+                fact = tooLittleFacts[Math.floor(Math.random() * tooLittleFacts.length)];
+            } else if (hoursSlept >= 7 && hoursSlept <= 9) {
+                // Facts about maintaining a good sleep schedule
+                const goodScheduleFacts = [
+                    "Consistent sleep schedule helps regulate your body's internal clock.",
+                    "Quality sleep improves memory and cognitive function.",
+                    "Avoid caffeine and heavy meals before bedtime for better sleep.",
+                    "Maintaining a consistent sleep schedule of 7-9 hours per night helps regulate the body's internal clock, promoting overall well-being and alertness.",
+                    "Maintaining a healthy sleep duration of 7-9 hours each night is associated with a lower risk of obesity and metabolic disorders, as proper sleep contributes to hormonal balance and appetite regulation."
+                ];
+                fact = goodScheduleFacts[Math.floor(Math.random() * goodScheduleFacts.length)];
+            } else if (hoursSlept > 9) {
+                // Facts about too much sleep
+                const tooMuchFacts = [
+                    "Oversleeping may increase the risk of obesity and diabetes.",
+                    "Excessive sleep can lead to daytime drowsiness and lethargy.",
+                    "Long sleep duration may be a sign of underlying health issues.",
+                    "Hey! WAKE UP!" // Special message for excessive sleep
+                ];
+                fact = tooMuchFacts[Math.floor(Math.random() * tooMuchFacts.length)];
+            }
+
+            factsContainer.innerHTML = `<h4>Sleep Fact:</h4><p>${fact}</p>`;
+        }
         document.addEventListener("DOMContentLoaded", function () {
             // Update the base URL of your backend API
             const API_BASE_URL = 'http://127.0.0.1:8086';  // Update this with the actual base URL of your backend
@@ -135,13 +174,11 @@
             loadAllSleepData();
 
             // Link getOneSleep to formToGetOneSleepDetail
-            const getSleepButton = document.getElementById("get_sleepy");
+            const getSleepButton = document.getElementById("get_sleepy"); // Update to match the button ID
             getSleepButton.addEventListener("click", getOneSleep);
 
-            // Link submitSleepForm to formtosubmitSleepForm
-            const createButton = document.getElementById("create_sleepy");
-            createButton.addEventListener("click", submitSleepForm);
 
+        
             // Function to load all sleep data
             function loadAllSleepData() {
                 fetch(API_URL, {
@@ -225,6 +262,9 @@
                     // Use the parsed float value
                     console.log("Sleep duration:", sleepDuration);
 
+                    // Display sleep-related facts based on the number of hours slept
+                    displaySleepFacts(sleepDuration);
+
                     // Update the API URL to include the sleep duration as a query parameter
                     fetch(`${API_BASE_URL}/api/sleeps?sleep_duration=${sleepDuration}`, {
                         method: "GET"
@@ -259,13 +299,12 @@
             }
 
 
-
             // Function to submit sleep form data
             function submitSleepForm(event) {
                 event.preventDefault();
 
                 // Get form data
-                const form = document.getElementById('formtosubmitSleepForm');
+                const form = document.getElementById('formToGetOneSleepDetail');
                 const sleepDuration = parseFloat(form.elements['sleepDuration'].value);
                 const sleepQuality = parseInt(form.elements['sleepQuality'].value);
                 const physicalActivityLevel = parseInt(form.elements['physicalActivityLevel'].value);
