@@ -115,6 +115,7 @@
                 const weeklyLog = JSON.parse(localStorage.getItem("weeklyLog")) || [];
                 weeklyLog.push(entry);
                 localStorage.setItem("weeklyLog", JSON.stringify(weeklyLog));
+                
                 // Clear input fields
                 document.getElementById("name").value = "";
                 document.getElementById("food").value = "";
